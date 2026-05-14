@@ -147,6 +147,7 @@
                 <properties>
                   <background color="-13488081"/>
                   <font name="Adwaita Mono"/>
+                  <text value=""/>
                 </properties>
               </component>
               <component id="ed0d3" class="javax.swing.JTextField" binding="txtName">
