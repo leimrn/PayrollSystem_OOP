@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 
 public class AdminView {
     private JPanel adminPanel;
@@ -22,10 +21,16 @@ public class AdminView {
     private JTable tblEmployees;
     private JButton btnDelete;
     private JPanel requestsCard;
-    private JTable tblEmployee; // Existing variable
+    private JTable tblEmployee;
     private JTable tblRequests;
-    private JButton approveButton; // Existing variable
-    private JButton declineButton; // Existing variable
+    private JButton approveButton;
+    private JButton declineButton;
+    private JButton btnComputePayroll;
+    private JPanel computeCard;
+    private JComboBox<String> cbPayPeriod;
+    private JComboBox<String> cbEmployeeSelect;
+    private JButton btnGeneratePayroll;
+    private JTextArea txtAdminPayslipPreview;
     private JButton btnApprove;
     private JButton btnDecline;
 
@@ -33,21 +38,56 @@ public class AdminView {
     private DefaultTableModel requestModel;
 
     public AdminView() {
-        // 1. Initialize Table Models
         employeeModel = new DefaultTableModel(new String[]{"ID", "Name", "Status", "Rate"}, 0);
         requestModel = new DefaultTableModel(new String[]{"Employee", "Type", "Days", "Status"}, 0);
 
-        // 2. FOOLPROOF LINKING: Attach model to ANY table variable the Designer might be using
         if (tblEmployees != null) tblEmployees.setModel(employeeModel);
         if (tblEmployee != null) tblEmployee.setModel(employeeModel);
         if (tblRequests != null) tblRequests.setModel(requestModel);
 
-        // --- SIDEBAR NAVIGATION ---
         if (btnAddEmployee != null) btnAddEmployee.addActionListener(e -> showPanel(addEmployeeCard));
         if (btnManage != null) btnManage.addActionListener(e -> showPanel(manageCard));
         if (btnRequests != null) btnRequests.addActionListener(e -> showPanel(requestsCard));
+        if (btnComputePayroll != null) btnComputePayroll.addActionListener(e -> showPanel(computeCard));
 
-        // --- ADD EMPLOYEE LOGIC ---
+        if (cbEmployeeSelect != null) cbEmployeeSelect.addItem("2025-001 - Cyrene Khaslana");
+        if (cbPayPeriod != null) cbPayPeriod.addItem("May 1 - May 15, 2026");
+
+        if (btnGeneratePayroll != null) {
+            btnGeneratePayroll.addActionListener(e -> {
+                if (txtAdminPayslipPreview != null) {
+                    txtAdminPayslipPreview.setText(
+                            "========================================\n" +
+                                    "           EMPLOYEE PAYSLIP\n" +
+                                    "========================================\n\n" +
+                                    "Employee ID:      2025-001\n" +
+                                    "Name:             Cyrene Khaslana\n" +
+                                    "Status:           Probationary\n" +
+                                    "Pay Period:       May 1 - May 15, 2026\n\n" +
+                                    "----------------------------------------\n" +
+                                    "EARNINGS\n" +
+                                    "----------------------------------------\n" +
+                                    "Base Rate:        ₱ 500.00 / day\n" +
+                                    "Days Worked:      11 days\n" +
+                                    "Gross Basic Pay:  ₱ 5,500.00\n" +
+                                    "Overtime Pay:     ₱ 0.00\n\n" +
+                                    "TOTAL EARNINGS:   ₱ 5,500.00\n\n" +
+                                    "----------------------------------------\n" +
+                                    "DEDUCTIONS\n" +
+                                    "----------------------------------------\n" +
+                                    "SSS:              ₱ 247.50\n" +
+                                    "PhilHealth:       ₱ 137.50\n" +
+                                    "Pag-IBIG:         ₱ 100.00\n" +
+                                    "Late/Absences:    ₱ 0.00\n\n" +
+                                    "TOTAL DEDUCTIONS: ₱ 485.00\n\n" +
+                                    "========================================\n" +
+                                    "NET PAY:          ₱ 5,015.00\n" +
+                                    "========================================"
+                    );
+                }
+            });
+        }
+
         if (saveEmployeeButton != null) {
             saveEmployeeButton.addActionListener(e -> {
                 String id = txtID.getText().trim();
@@ -62,10 +102,7 @@ public class AdminView {
 
                 try {
                     Double.parseDouble(rateText);
-                    // Adds the row to the model, which immediately updates whichever table is visible
                     employeeModel.addRow(new Object[]{id, name, status, rateText});
-
-                    // Clear the fields
                     txtID.setText("");
                     txtName.setText("");
                     txtRate.setText("");
@@ -76,12 +113,9 @@ public class AdminView {
             });
         }
 
-        // --- MANAGE EMPLOYEES LOGIC (DELETE) ---
         if (btnDelete != null) {
             btnDelete.addActionListener(e -> {
                 int selectedRow = -1;
-
-                // Safely check whichever table is currently active in the UI
                 if (tblEmployees != null && tblEmployees.getSelectedRow() != -1) {
                     selectedRow = tblEmployees.getSelectedRow();
                 } else if (tblEmployee != null && tblEmployee.getSelectedRow() != -1) {
@@ -96,14 +130,12 @@ public class AdminView {
             });
         }
 
-        // --- LEAVE REQUESTS LOGIC ---
         if (btnApprove != null) btnApprove.addActionListener(e -> handleRequestStatus("Approved"));
         if (approveButton != null) approveButton.addActionListener(e -> handleRequestStatus("Approved"));
 
         if (btnDecline != null) btnDecline.addActionListener(e -> handleRequestStatus("Declined"));
         if (declineButton != null) declineButton.addActionListener(e -> handleRequestStatus("Declined"));
 
-        // --- LOGOUT ---
         if (btnLogout != null) {
             btnLogout.addActionListener(e -> {
                 int confirm = JOptionPane.showConfirmDialog(adminPanel, "Logout?", "Confirm", JOptionPane.YES_NO_OPTION);
@@ -115,10 +147,7 @@ public class AdminView {
             });
         }
 
-        // Dummy data for testing the Requests table
         requestModel.addRow(new Object[]{"Phainon Khaslana", "Vacation", "5", "Pending"});
-
-        // Default View
         showPanel(addEmployeeCard);
     }
 
@@ -137,6 +166,7 @@ public class AdminView {
         if (addEmployeeCard != null) addEmployeeCard.setVisible(false);
         if (manageCard != null) manageCard.setVisible(false);
         if (requestsCard != null) requestsCard.setVisible(false);
+        if (computeCard != null) computeCard.setVisible(false);
 
         if (panelToShow != null) {
             panelToShow.setVisible(true);

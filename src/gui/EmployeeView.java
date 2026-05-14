@@ -33,6 +33,7 @@ public class EmployeeView {
     private JTextField txtRequestDate;
     private JTextArea txtReason;
     private JButton submitButton;
+    private JTextArea txtPayslip;
     private JButton btnSubmitRequest;
 
     private String employeeID;

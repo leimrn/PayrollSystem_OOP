@@ -50,7 +50,7 @@
           </component>
           <component id="677a5" class="javax.swing.JButton" binding="btnPayslip">
             <constraints>
-              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
@@ -62,7 +62,7 @@
           </component>
           <component id="876f1" class="javax.swing.JButton" binding="btnApply">
             <constraints>
-              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
@@ -74,7 +74,7 @@
           </component>
           <component id="81685" class="javax.swing.JButton" binding="btnLogout">
             <constraints>
-              <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag top="10" left="0" bottom="10" right="0" weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
@@ -86,19 +86,19 @@
           </component>
           <vspacer id="ed917">
             <constraints>
-              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
           </vspacer>
           <vspacer id="1ea54">
             <constraints>
-              <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
           </vspacer>
           <vspacer id="adf76">
             <constraints>
-              <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
           </vspacer>
@@ -110,10 +110,16 @@
           </vspacer>
           <hspacer id="8e019">
             <constraints>
-              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
           </hspacer>
+          <vspacer id="6d2a5">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+          </vspacer>
         </children>
       </grid>
       <grid id="fe0ad" binding="contentArea" layout-manager="CardLayout" hgap="0" vgap="0">
@@ -121,23 +127,88 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="payslipCard" binding="payslipCard" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="payslipCard" binding="payslipCard" layout-manager="GridBagLayout">
             <constraints>
               <card name="payslip"/>
             </constraints>
-            <properties/>
+            <properties>
+              <font/>
+              <foreground color="-14868447"/>
+            </properties>
             <border type="empty"/>
             <children>
-              <grid id="33fac" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+              <hspacer id="d1c5b">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="0.0" ipady="1"/>
                 </constraints>
-                <properties/>
+              </hspacer>
+              <hspacer id="c1a91">
+                <constraints>
+                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="0.0" ipadx="2" ipady="1"/>
+                </constraints>
+              </hspacer>
+              <vspacer id="60f03">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="1.0" ipadx="1"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="80592">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="1.0" ipadx="1" ipady="2"/>
+                </constraints>
+              </vspacer>
+              <scrollpane id="63947">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <font/>
+                  <horizontalScrollBarPolicy value="31"/>
+                  <verticalScrollBarPolicy value="21"/>
+                </properties>
                 <border type="none"/>
-                <children/>
-              </grid>
+                <children>
+                  <component id="94924" class="javax.swing.JTextArea" binding="txtPayslip">
+                    <constraints/>
+                    <properties>
+                      <alignmentY value="0.5"/>
+                      <background color="-14868447"/>
+                      <columns value="45"/>
+                      <editable value="false"/>
+                      <font name="Bitstream Vera Sans Mono" size="14"/>
+                      <foreground color="-1"/>
+                      <lineWrap value="false"/>
+                      <rows value="29"/>
+                      <text value="---------------------------------------------&#10;Employee ID:      2025-001 &#10;Name:             Cyrene Khaslana &#10;Status:           Probationary &#10;Pay Period:       May 1 - May 15, 2026&#10;&#10;---------------------------------------------&#10;EARNINGS&#10;---------------------------------------------&#10;Base Rate:        ₱ 500.00 / Day&#10;Days Worked:      11 Days&#10;Gross Basic Pay:  ₱ 5,500.00&#10;Overtime Pay:     ₱ 0.00&#10;&#10;TOTAL EARNINGS:   ₱ 5,500.00&#10;&#10;---------------------------------------------&#10;DEDUCTIONS&#10;---------------------------------------------&#10;SSS:              ₱ 247.50&#10;PhilHealth:       ₱ 137.50&#10;Pag-IBIG:         ₱ 100.00&#10;Late/Absences:    ₱ 0.00&#10;&#10;TOTAL DEDUCTIONS: ₱ 485.00&#10;&#10;---------------------------------------------&#10;NET PAY:          ₱ 5,015.00&#10;---------------------------------------------"/>
+                      <wrapStyleWord value="false"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <component id="d9dfa" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
+                  <foreground color="-98279"/>
+                  <horizontalAlignment value="10"/>
+                  <horizontalTextPosition value="11"/>
+                  <text value="EMPLOYEE PAYSLIP"/>
+                </properties>
+              </component>
+              <vspacer id="eddb9">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+              </vspacer>
             </children>
           </grid>
           <grid id="54f69" binding="timekeepingCard" layout-manager="GridLayoutManager" row-count="10" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -311,7 +382,7 @@
               <card name="profile"/>
             </constraints>
             <properties>
-              <font size="16"/>
+              <font name="Bitstream Vera Sans Mono" size="22"/>
             </properties>
             <border type="none"/>
             <children>
@@ -332,7 +403,7 @@
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>
                 </constraints>
                 <properties>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="Employee ID:"/>
                 </properties>
               </component>
@@ -343,7 +414,7 @@
                 </constraints>
                 <properties>
                   <alignmentX value="1.0"/>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="EMP-400"/>
                 </properties>
               </component>
@@ -353,7 +424,7 @@
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>
                 </constraints>
                 <properties>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="Full Name:"/>
                 </properties>
               </component>
@@ -363,7 +434,7 @@
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>
                 </constraints>
                 <properties>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="Employment Status"/>
                 </properties>
               </component>
@@ -373,7 +444,7 @@
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>
                 </constraints>
                 <properties>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="Base Rate:"/>
                 </properties>
               </component>
@@ -384,7 +455,7 @@
                 </constraints>
                 <properties>
                   <alignmentX value="1.0"/>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="Cyrene Khaslana"/>
                 </properties>
               </component>
@@ -395,7 +466,7 @@
                 </constraints>
                 <properties>
                   <alignmentX value="1.0"/>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="Probationary"/>
                 </properties>
               </component>
@@ -406,7 +477,7 @@
                 </constraints>
                 <properties>
                   <alignmentX value="1.0"/>
-                  <font name="Adwaita Mono" size="16" style="1"/>
+                  <font name="Bitstream Vera Sans Mono" size="22"/>
                   <text value="$65,000"/>
                 </properties>
               </component>
