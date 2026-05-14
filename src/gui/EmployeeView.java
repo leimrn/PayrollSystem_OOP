@@ -12,7 +12,9 @@ public class EmployeeView {
     private JButton btnTimekeeping;
     private JButton btnProfile;
     private JButton btnApply;
+    private JButton btnPayslip;
     private JButton btnLogout;
+    private JPanel payslipCard;
     private JPanel timekeepingCard;
     private JPanel profileCard;
     private JPanel applyCard;
@@ -41,6 +43,7 @@ public class EmployeeView {
         if (btnTimekeeping != null) btnTimekeeping.addActionListener(e -> showCard("time"));
         if (btnProfile != null) btnProfile.addActionListener(e -> showCard("profile"));
         if (btnApply != null) btnApply.addActionListener(e -> showCard("apply"));
+        if (btnPayslip != null) btnPayslip.addActionListener(e -> showCard("payslip"));
 
         if (btnLogout != null) {
             btnLogout.addActionListener(e -> {
