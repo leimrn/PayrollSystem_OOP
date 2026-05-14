@@ -1,0 +1,8 @@
+123,leila mirano,Regular,25000.00
+123,leila mirano,Regular,25000.00
+20251078445,kiel san miguel,Contractual,50000.00
+34523,hahahhaha,Regular,45000.00
+123,asdfdfdsfsdf,Regular,234586
+ID: ,12323,Name: ,qweqweqwe
+123,asedasdasd,Probationary,123456
+123123,asdasd,Probationary,123123

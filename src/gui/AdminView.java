@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.*;
 
 public class AdminView {
     private JPanel adminPanel;
@@ -36,6 +37,8 @@ public class AdminView {
 
     private DefaultTableModel employeeModel;
     private DefaultTableModel requestModel;
+
+    private storage.EmployeeStorage empStorage = new storage.EmployeeStorage();
 
     public AdminView() {
         employeeModel = new DefaultTableModel(new String[]{"ID", "Name", "Status", "Rate"}, 0);
@@ -88,30 +91,39 @@ public class AdminView {
             });
         }
 
+
         if (saveEmployeeButton != null) {
             saveEmployeeButton.addActionListener(e -> {
-                String id = txtID.getText().trim();
-                String name = txtName.getText().trim();
-                String status = (cbStatus != null) ? (String) cbStatus.getSelectedItem() : "Regular";
-                String rateText = txtRate.getText().trim();
 
-                if (id.isEmpty() || name.isEmpty() || rateText.isEmpty()) {
+                String lblID = txtID.getText().trim();
+                String lblName = txtName.getText().trim();
+                String lblStatus = (cbStatus != null) ? (String) cbStatus.getSelectedItem() : "Regular";
+                String lblRate = txtRate.getText().trim();
+
+                if (lblID.isEmpty() || lblName.isEmpty() || lblRate.isEmpty()) {
                     JOptionPane.showMessageDialog(adminPanel, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 try {
-                    Double.parseDouble(rateText);
-                    employeeModel.addRow(new Object[]{id, name, status, rateText});
+                    Double.parseDouble(lblRate);
+
+                    empStorage.saveEmployee(lblID, lblName, lblStatus, lblRate);
+
+                    employeeModel.addRow(new Object[]{lblID, lblName, lblStatus, lblRate});
+
                     txtID.setText("");
                     txtName.setText("");
                     txtRate.setText("");
-                    JOptionPane.showMessageDialog(adminPanel, "Employee " + name + " added.");
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(adminPanel, "Invalid rate.");
+
+                    JOptionPane.showMessageDialog(adminPanel, "Employee " + lblName + " added and saved to file.");
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(adminPanel, "Invalid rate. Please enter a number.");
                 }
             });
         }
+
 
         if (btnDelete != null) {
             btnDelete.addActionListener(e -> {
