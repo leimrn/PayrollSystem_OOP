@@ -67,10 +67,6 @@ public class EmployeeStorage {
         return employeeList;
     }
 
-    /**
-     * ADD THIS METHOD: Overwrites the file with the full list from the table.
-     * This fixes the "cannot find symbol" error.
-     */
     public void updateAllEmployees(List<Object[]> allEmployees) {
         // Passing 'false' to FileWriter tells it to overwrite the file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH, false))) {

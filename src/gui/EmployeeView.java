@@ -111,11 +111,18 @@ public class EmployeeView {
             String type = cbRequestType != null && cbRequestType.getSelectedItem() != null ? (String) cbRequestType.getSelectedItem() : "";
             String date = txtRequestDate != null ? txtRequestDate.getText().trim() : "";
             String reason = txtReason != null ? txtReason.getText().trim() : "";
+            String empName = lblName != null ? lblName.getText() : "Unknown Employee";
 
             if (date.isEmpty() || reason.isEmpty()) {
                 JOptionPane.showMessageDialog(employeePanel, "Please fill out all fields.", "Missing Info", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+
+            storage.RequestStorage reqStorage = new storage.RequestStorage();
+            reqStorage.saveRequest(empName, type, date, "Pending");
+
+            //String msg = String.format("Request Submitted to Admin!\nType: %s\nDate: %s\nEmployee: %s", type, date, empName);
+            //JOptionPane.showMessageDialog(employeePanel, msg);
 
             String msg = String.format("Request Submitted!\nType: %s\nDate: %s\nEmployee: Cyrene Khaslana", type, date);
             JOptionPane.showMessageDialog(employeePanel, msg);
