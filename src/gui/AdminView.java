@@ -52,7 +52,7 @@ public class AdminView {
         if (btnAddEmployee != null) btnAddEmployee.addActionListener(e -> showPanel(addEmployeeCard));
         if (btnManage != null) btnManage.addActionListener(e -> showPanel(manageCard));
 
-        //OT and Leave Storage2
+        //OT and Leave Storage
         requestModel = new DefaultTableModel(new String[]{"Employee", "Type", "Days", "Status"}, 0);
         storage.RequestStorage reqStorage = new storage.RequestStorage();
         java.util.List<Object[]> savedRequests = reqStorage.loadRequests();
