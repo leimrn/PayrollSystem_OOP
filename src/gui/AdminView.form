@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.AdminView">
   <grid id="27dc6" binding="adminPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="644" height="671"/>
+      <xy x="20" y="20" width="644" height="730"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -232,7 +232,7 @@
               </vspacer>
             </children>
           </grid>
-          <grid id="5b3f9" binding="manageCard" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="5b3f9" binding="manageCard" layout-manager="GridLayoutManager" row-count="4" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <card name="manage"/>
@@ -242,7 +242,7 @@
             <children>
               <scrollpane id="2360b">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="1" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <font name="Bitstream Vera Sans Mono"/>
@@ -263,7 +263,7 @@
               </scrollpane>
               <component id="e623b" class="javax.swing.JButton" binding="btnDelete">
                 <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-13488081"/>
@@ -276,7 +276,7 @@
               </component>
               <vspacer id="a174b">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                  <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                     <preferred-size width="50" height="50"/>
                     <maximum-size width="50" height="50"/>
                   </grid>
@@ -284,7 +284,7 @@
               </vspacer>
               <vspacer id="da250">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                  <grid row="0" column="1" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                     <preferred-size width="50" height="50"/>
                     <maximum-size width="50" height="50"/>
                   </grid>
@@ -300,10 +300,28 @@
               </hspacer>
               <hspacer id="ecdca">
                 <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="50" height="50"/>
                     <maximum-size width="50" height="50"/>
                   </grid>
+                </constraints>
+              </hspacer>
+              <component id="6f17" class="javax.swing.JButton" binding="btnEdit">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-13488081"/>
+                  <font name="Bitstream Vera Sans Mono"/>
+                  <foreground color="-98279"/>
+                  <label value="Edit"/>
+                  <margin top="5" left="10" bottom="5" right="10"/>
+                  <text value="Edit"/>
+                </properties>
+              </component>
+              <hspacer id="43192">
+                <constraints>
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
               </hspacer>
             </children>
@@ -395,7 +413,7 @@
               </vspacer>
             </children>
           </grid>
-          <grid id="18cd0" binding="computeCard" layout-manager="GridLayoutManager" row-count="9" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="18cd0" binding="computeCard" layout-manager="GridLayoutManager" row-count="11" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <card name="compute"/>
@@ -413,7 +431,7 @@
               </vspacer>
               <vspacer id="bfaa6">
                 <constraints>
-                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                  <grid row="10" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                     <preferred-size width="100" height="100"/>
                     <maximum-size width="100" height="100"/>
                   </grid>
@@ -444,16 +462,103 @@
                   <text value="Select Employee:"/>
                 </properties>
               </component>
+              <component id="88ff0" class="javax.swing.JComboBox" binding="cbEmployeeSelect">
+                <constraints>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14868447"/>
+                  <font name="Adwaita Mono"/>
+                  <foreground color="-1"/>
+                </properties>
+              </component>
+              <component id="4e154" class="javax.swing.JButton" binding="btnGeneratePayroll">
+                <constraints>
+                  <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-13488081"/>
+                  <foreground color="-98279"/>
+                  <text value="Generate Payslip"/>
+                </properties>
+              </component>
+              <vspacer id="14970">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="10"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <vspacer id="67bde">
+                <constraints>
+                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="10"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <scrollpane id="6c91d">
+                <constraints>
+                  <grid row="9" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-16777216"/>
+                  <foreground color="-1"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="18529" class="javax.swing.JTextArea" binding="txtAdminPayslipPreview">
+                    <constraints/>
+                    <properties>
+                      <background color="-14868447"/>
+                      <editable value="false"/>
+                      <font name="Adwaita Mono"/>
+                      <foreground color="-1"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
+              <vspacer id="a0419">
+                <constraints>
+                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="10"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="5d6e8" class="javax.swing.JComboBox" binding="cbPayPeriod">
+                <constraints>
+                  <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-14868447"/>
+                  <font name="Adwaita Mono"/>
+                  <foreground color="-1"/>
+                  <model>
+                    <item value="1st Cut-off (1st-15th)"/>
+                    <item value="2nd Cut-off (16th-End of Month)"/>
+                  </model>
+                </properties>
+              </component>
               <component id="1fbc9" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="1" row-span="3" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <font name="Adwaita Mono" size="14"/>
                   <text value="Pay Period:"/>
                 </properties>
               </component>
-              <component id="7593" class="javax.swing.JComboBox" binding="cbPayPeriod">
+              <vspacer id="3042a">
+                <constraints>
+                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                    <preferred-size width="10" height="10"/>
+                    <maximum-size width="10" height="10"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <component id="1b966" class="javax.swing.JComboBox" binding="cbMonth">
                 <constraints>
                   <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -477,71 +582,6 @@
                   </model>
                 </properties>
               </component>
-              <component id="88ff0" class="javax.swing.JComboBox" binding="cbEmployeeSelect">
-                <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-14868447"/>
-                  <font name="Adwaita Mono"/>
-                  <foreground color="-1"/>
-                </properties>
-              </component>
-              <component id="4e154" class="javax.swing.JButton" binding="btnGeneratePayroll">
-                <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-13488081"/>
-                  <foreground color="-98279"/>
-                  <text value="Generate Payslip"/>
-                </properties>
-              </component>
-              <vspacer id="14970">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="10" height="10"/>
-                    <maximum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-              </vspacer>
-              <vspacer id="67bde">
-                <constraints>
-                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="10" height="10"/>
-                    <maximum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-              </vspacer>
-              <scrollpane id="6c91d">
-                <constraints>
-                  <grid row="7" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-16777216"/>
-                  <foreground color="-1"/>
-                </properties>
-                <border type="none"/>
-                <children>
-                  <component id="18529" class="javax.swing.JTextArea" binding="txtAdminPayslipPreview">
-                    <constraints/>
-                    <properties>
-                      <background color="-14868447"/>
-                      <editable value="false"/>
-                      <font name="Adwaita Mono"/>
-                      <foreground color="-1"/>
-                    </properties>
-                  </component>
-                </children>
-              </scrollpane>
-              <vspacer id="a0419">
-                <constraints>
-                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
-                    <preferred-size width="10" height="10"/>
-                    <maximum-size width="10" height="10"/>
-                  </grid>
-                </constraints>
-              </vspacer>
             </children>
           </grid>
         </children>

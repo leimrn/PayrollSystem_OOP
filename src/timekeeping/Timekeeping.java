@@ -1,120 +1,112 @@
 package timekeeping;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Timekeeping {
-    private double totalHours, totalOvertime, totalUndertime; // double as hours can have fractions
-    private int totalAbsences, totalLeaves;                   //can be int as absences are counted in full days
+    private double totalHours, totalOvertime, totalUndertime;
+    private double totalWeekendHours, totalWeekendOvertime;
+    private int totalAbsences, totalLeaves;
     private ArrayList<DailyRecord> timesheet;
 
-    // The constructor
     public Timekeeping() {
         this.timesheet = new ArrayList<>();
-
-        // Set variables to 0 so ensure a clean slate
         this.totalHours = 0.0;
         this.totalOvertime = 0.0;
         this.totalUndertime = 0.0;
+        this.totalWeekendHours = 0.0;
+        this.totalWeekendOvertime = 0.0;
         this.totalAbsences = 0;
         this.totalLeaves = 0;
     }
 
-    // Feeding the timesheet
-    public void addDailyRecord(String timeIn, String timeOut) {
-        DailyRecord record = new DailyRecord(timeIn, timeOut);
-        timesheet.add(record);
-    } // Whenever the main menu asks the user for their time in and out, the two strings go to this method
-      // It stores the data in the DailyRecord helper object (an objectified Array)
-      // and drops that into Arraylist
-
-    // Getters
-    public double getTotalHours() {
-        return totalHours;
+    public void addDailyRecord(String empId, String date, String timeIn, String timeOut) {
+        timesheet.add(new DailyRecord(empId, date, timeIn, timeOut));
     }
 
-    public double getTotalOvertime() {
-        return totalOvertime;
-    }
-
-    public double getTotalUndertime() {
-        return totalUndertime;
-    }
-
-    public int getTotalAbsences() {
-        return totalAbsences;
-    }
-
+    public double getTotalHours() { return totalHours; }
+    public double getTotalOvertime() { return totalOvertime; }
+    public double getTotalUndertime() { return totalUndertime; }
+    public double getTotalWeekendHours() { return totalWeekendHours; }
+    public double getTotalWeekendOvertime() { return totalWeekendOvertime; }
+    public int getTotalAbsences() { return totalAbsences; }
     public int getTotalLeaves() { return totalLeaves; }
 
-    // Use a for each loop to look at every day in the timesheet in order to check for absences
     public void calculateHours() {
-        for (DailyRecord record : timesheet) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d yyyy", Locale.ENGLISH);
 
-            // Is it a paid leave?
+        for (DailyRecord record : timesheet) {
             if (record.getTimeIn().equalsIgnoreCase("Leave")) {
                 totalLeaves++;
-                continue; // Skip to next day
+                continue;
             }
 
-            // Is it an unpaid absence?
-            // Check absence syntax (if gettimein from DailyRecord contains nothing or "absent", then it is an absence
             if (record.getTimeIn().equalsIgnoreCase("Absent") || record.getTimeIn().isEmpty()) {
                 totalAbsences++;
-                continue; // this will tell java to skip the syntax below and move to the next day
+                continue;
             }
 
-            // Time conversion syntax
-            // Convert the strings to time objects
             try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
-                LocalTime in = LocalTime.parse(record.getTimeIn(), formatter);
-                LocalTime out = LocalTime.parse(record.getTimeOut(), formatter);
+                // 1. Time Parsing
+                LocalTime in = LocalTime.parse(record.getTimeIn().toUpperCase(), timeFormatter);
+                LocalTime out = LocalTime.parse(record.getTimeOut().toUpperCase(), timeFormatter);
 
-                // Calculate the total minutes, minus the 1-hour break
                 long rawMinutes = Duration.between(in, out).toMinutes();
+                if (rawMinutes < 0) rawMinutes += 1440; // Night shift handling
 
-                // Failsafe for night shifts bringing the hours into negatives
-                if (rawMinutes < 0) {
-                    rawMinutes += 1440;
-                }
-
-                // Failsafe if i.e they input the same time in time out "In: 12:30" "Out: 12:30"
                 if (rawMinutes == 0) {
-                    totalUndertime += 8.0; // They missed their whole 8-hour shift for the day
+                    totalUndertime += 8.0;
                     continue;
                 }
 
+                // 2. Strict Break Logic (Gross Minutes to Net Minutes)
                 long netMinutes = rawMinutes;
-                if (rawMinutes > 240) {
-                    netMinutes -= 60; // Here we subtract the 1-hour break
+                if (rawMinutes > 480) {          // Over 8 hours
+                    netMinutes -= 60;            // 1 Hour Break
+                } else if (rawMinutes >= 240) {  // Between 4 and 8 hours
+                    netMinutes -= 30;            // 30 Minute Break
                 }
 
-                // Convert back to decimal hours
-                double netHours = netMinutes / 60.0; // Divide with a .0 for the most accurate result
+                double netHours = netMinutes / 60.0;
 
-                // An If statement for if hours is exactly 8
-                if (netHours == 8.0) {
-                    totalHours += 8.0;
+                // 3. Weekend Detection
+                boolean isWeekend = false;
+                try {
+                    LocalDate date = LocalDate.parse(record.getDate() + " 2026", dateFormatter);
+                    DayOfWeek day = date.getDayOfWeek();
+                    if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY) {
+                        isWeekend = true;
+                    }
+                } catch (Exception dateEx) {
+                    // Fallback if UI sends a weird date
                 }
 
-                // If hours does not meet 8
-                if (netHours < 8.0) {
-                    totalHours += netHours;
-                    totalUndertime += (8.0 - netHours);
+                // 4. Distribution of Hours
+                if (isWeekend) {
+                    if (netHours <= 8.0) {
+                        totalWeekendHours += netHours;
+                    } else {
+                        totalWeekendHours += 8.0;
+                        totalWeekendOvertime += (netHours - 8.0);
+                    }
+                } else {
+                    if (netHours < 8.0) {
+                        totalHours += netHours;
+                        totalUndertime += (8.0 - netHours);
+                    } else {
+                        totalHours += 8.0;
+                        totalOvertime += (netHours - 8.0);
+                    }
                 }
 
-                // If hours is over 8
-                if (netHours > 8.0) {
-                    totalHours += 8.0;
-                    totalOvertime += (netHours - 8.0);
-                }
             } catch (Exception e) {
-                // Safety net: if they type something unparseable like "24:22"
-                totalUndertime += 8.0;
-                continue; // This will tell java to skip the syntax below and move to the next day
+                totalUndertime += 8.0; // Failsafe for unparseable time inputs
             }
         }
     }

@@ -80,7 +80,7 @@ public class LoginView extends JFrame {
         UIManager.put("Table.selectionBackground", accentOrange);
         UIManager.put("Table.selectionForeground", darkBg);
 
-// The "White Void" Fix (Viewport)
+// The "White Void" Fix
         UIManager.put("Viewport.background", darkBg);
 
         SwingUtilities.invokeLater(() -> {

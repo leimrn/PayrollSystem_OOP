@@ -13,36 +13,37 @@ public class GrossPayCalculator {
         this.hourrate = 0.0;
     }
 
-    // UPDATED: Now accepts status and baseRate directly from the UI/Table
     public void calculategrosspay(String status, double baseRate, Timekeeping timekeeping){
 
         // check if employee is parttime (no work, no pay logic)
         if (status.equalsIgnoreCase("Part-time")) {
-            this.hourrate = baseRate; // BaseRate is their hourly rate
+            this.hourrate = baseRate;
+
             this.overtimepay = timekeeping.getTotalOvertime() * this.hourrate * 1.25;
-            this.grossPay = (timekeeping.getTotalHours() * this.hourrate) + this.overtimepay;
+            double weekendPay = timekeeping.getTotalWeekendHours() * this.hourrate * 1.30;
+            double weekendOtPay = timekeeping.getTotalWeekendOvertime() * this.hourrate * 1.69;
+
+            this.grossPay = (timekeeping.getTotalHours() * this.hourrate) + this.overtimepay + weekendPay + weekendOtPay;
         } else {
-            // Uses the standard 22-day work month and 8-hour work day logic [cite: 1868]
+            // Uses the standard 22-day work month and 8-hour work day logic
             this.hourrate = (baseRate / 22.0) / 8.0;
 
-            // Calculate OT using total overtime hours multiplied by hourly rate and 1.25 premium [cite: 1869]
+            // Calculate standard OT
             this.overtimepay = timekeeping.getTotalOvertime() * this.hourrate * 1.25;
+
+            // NEW: Calculate Weekend Pay (130%) and Weekend OT (169%)
+            double weekendPay = timekeeping.getTotalWeekendHours() * this.hourrate * 1.30;
+            double weekendOtPay = timekeeping.getTotalWeekendOvertime() * this.hourrate * 1.69;
 
             // Calculate semi-monthly cutoff (Monthly Base Rate / 2)
             double cutoffSalary = baseRate / 2.0;
-            this.grossPay = cutoffSalary + this.overtimepay;
+
+            // Add all the premium pays to the base cutoff salary
+            this.grossPay = cutoffSalary + this.overtimepay + weekendPay + weekendOtPay;
         }
     }
 
-    public double getGrossPay(){
-        return grossPay;
-    }
-
-    public double getOvertimepay(){
-        return overtimepay;
-    }
-
-    public double getHourrate(){
-        return hourrate;
-    }
+    public double getGrossPay(){ return grossPay; }
+    public double getOvertimepay(){ return overtimepay; }
+    public double getHourrate(){ return hourrate; }
 }

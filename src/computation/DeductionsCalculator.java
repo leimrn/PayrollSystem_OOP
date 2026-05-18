@@ -90,10 +90,27 @@ public class DeductionsCalculator {
     }
 
     // Getters remain the same...
-    public double getSssContribution() { return sssContribution; }
-    public double getPhilhealthContribution() { return philhealthContribution; }
-    public double getPagibigContribution() { return pagibigContribution; }
-    public double getWithholdingTax() { return withholdingTax; }
-    public double getAbsenceDeduction() { return absenceDeduction; }
-    public double getUndertimeDeduction() { return undertimeDeduction; }
+    public double getSssContribution() {
+        return sssContribution;
+    }
+
+    public double getPhilhealthContribution() {
+        return philhealthContribution;
+    }
+
+    public double getPagibigContribution() {
+        return pagibigContribution;
+    }
+
+    public double getWithholdingTax() {
+        return withholdingTax;
+    }
+
+    public double getAbsenceDeduction() {
+        return absenceDeduction;
+    }
+
+    public double getUndertimeDeduction() {
+        return undertimeDeduction;
+    }
 }
