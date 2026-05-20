@@ -52,6 +52,7 @@ public class EmployeeView {
 
         boolean found = false;
         for (Object[] emp : allEmps) {
+            //Check if the row is the employee selected
             if (emp[0].toString().equals(id)) {
                 if (lblID != null) lblID.setText(emp[0].toString());
                 if (lblName != null) lblName.setText(emp[1].toString());
@@ -63,7 +64,7 @@ public class EmployeeView {
         }
 
         if (!found) {
-            // If ID somehow isn't in CSV
+            // If ID isn't in CSV
             if (lblID != null) lblID.setText(id);
             if (lblName != null) lblName.setText("Unknown");
         }
@@ -78,23 +79,28 @@ public class EmployeeView {
 
                 if (txtPayslip != null && lblID != null && lblRate != null) {
                     try {
+                        //Gather employee information
                         String name = lblName.getText();
                         String status = lblStatus.getText();
                         double rate = Double.parseDouble(lblRate.getText());
-                        // Get the date
+                        // Get the current date and time
                         java.time.LocalDate today = java.time.LocalDate.now();
                         String month = today.format(java.time.format.DateTimeFormatter.ofPattern("MMMM"));
                         String year = String.valueOf(today.getYear());
                         int currentDay = today.getDayOfMonth();
 
                         // determine the cut-off period based on today's date
+                        int startDay, endDay;
                         String period;
                         if (currentDay <= 15) {
+                            startDay = 1;
+                            endDay = 15;
                             period = month + " 1 - " + month + " 15, " + year;
                         } else {
                             // lengthOfMonth() knows if it's 28, 30, or 31 days!
-                            int lastDay = today.lengthOfMonth();
-                            period = month + " 16 - " + month + " " + lastDay + ", " + year;
+                            startDay = 16;
+                            endDay = today.lengthOfMonth();
+                            period = month + " 16 - " + month + " " + endDay + ", " + year;
                         }
 
                         // REAL Timekeeping from CSV
@@ -103,28 +109,86 @@ public class EmployeeView {
 
                         // Load only the records for this specific employee
                         java.util.List<Object[]> myRecords = timeStorage.loadRecordsForEmployee(employeeID);
+                        //Get employee requests from csv
+                        storage.RequestStorage reqStorage = new storage.RequestStorage();
+                        java.util.List<Object[]> allRequests = reqStorage.loadRequests();
 
-                        for (Object[] row : myRecords) {
-                            String date = row[1].toString();
-                            String tIn = row[2].toString();
-                            String tOut = row[3].toString();
+                        int missingDays = 0;
+                        //Checks every single day
+                        for (int d = startDay; d <= endDay; d++) {
+                            java.time.LocalDate dateToCheck = java.time.LocalDate.of(today.getYear(), today.getMonth(), d);
+                            String targetDate = month + " " + d;
+                            boolean foundInCSV = false;
+                            Object[] csvRow = null;
 
-                            timeData.addDailyRecord(employeeID, date, tIn, tOut);
+                            // look for log in attendacne.csv
+                            for (Object[] row : myRecords) {
+                                if (row[1].toString().trim().equalsIgnoreCase(targetDate)) {
+                                    foundInCSV = true;
+                                    csvRow = row;
+                                    break;
+                                }
+                            }
+
+                            //Check request status for this date
+                            boolean isLeaveApproved = false;
+                            boolean isOtApproved = false;
+                            for (Object[] req : allRequests) {
+
+                                if (req[0].toString().equalsIgnoreCase(name) && req[2].toString().contains(targetDate)) {
+                                    if (req[3].toString().equalsIgnoreCase("Approved")) {
+                                        if (req[1].toString().equalsIgnoreCase("Leave")) isLeaveApproved = true;
+                                        if (req[1].toString().equalsIgnoreCase("Overtime")) isOtApproved = true;
+                                    }
+                                }
+                            }
+
+                            //Handles missing days
+                            if (foundInCSV) {
+                                String tIn = csvRow[2].toString().trim();
+                                String tOut = csvRow[3].toString().trim();
+
+                                // If overtime is NOT approved, forcefully reset the exit time to 5:00 PM
+                                if (!isOtApproved && tOut.contains("PM")) {
+                                    // Simple logic: if it's after 5 PM, reset it to 5 PM
+                                    int hour = Integer.parseInt(tOut.split(":")[0]);
+                                    if (hour >= 5 && hour != 12) {
+                                        tOut = "05:00 PM";
+                                    }
+                                }
+                                timeData.addDailyRecord(id, targetDate, tIn, tOut);
+                            }
+                            else if (isLeaveApproved) {
+                                // approved Leave = Paid. Add a standard 8-hour record.
+                                timeData.addDailyRecord(id, targetDate, "08:00 AM", "05:00 PM");
+                            }
+                            else {
+                                // no work + No approved leave + Weekday = Absence
+                                boolean isWeekend = (dateToCheck.getDayOfWeek() == java.time.DayOfWeek.SATURDAY ||
+                                        dateToCheck.getDayOfWeek() == java.time.DayOfWeek.SUNDAY);
+                                if (!isWeekend) {
+                                    missingDays++;
+                                }
+                            }
                         }
 
+                        timeData.setTotalAbsences(missingDays);
                         timeData.calculateHours();
 
-                        // midterm math
                         computation.GrossPayCalculator grossCalc = new computation.GrossPayCalculator();
                         grossCalc.calculategrosspay(status, rate, timeData);
 
                         computation.DeductionsCalculator dedCalc = new computation.DeductionsCalculator();
                         dedCalc.calculateAllDeductions(status, rate, timeData, grossCalc.getGrossPay());
 
-                        double netPay = grossCalc.getGrossPay() -
-                                (dedCalc.getSssContribution() + dedCalc.getPhilhealthContribution() +
-                                        dedCalc.getPagibigContribution() + dedCalc.getAbsenceDeduction() +
-                                        dedCalc.getUndertimeDeduction());
+                        double totalDeductions = dedCalc.getSssContribution() +
+                                dedCalc.getPhilhealthContribution() +
+                                dedCalc.getPagibigContribution() +
+                                dedCalc.getAbsenceDeduction() +
+                                dedCalc.getUndertimeDeduction() +
+                                dedCalc.getWithholdingTax();
+
+                        double netPay = grossCalc.getGrossPay() - totalDeductions;
                         if (netPay < 0) netPay = 0.0;
 
                         // Print
@@ -149,15 +213,15 @@ public class EmployeeView {
                                         "SSS:              ₱ %.2f\n" +
                                         "PhilHealth:       ₱ %.2f\n" +
                                         "Pag-IBIG:         ₱ %.2f\n" +
-                                        "Absences/Late:    ₱ %.2f\n" +
-                                        "Withholding Tax:  ₱ %.2f\n\n" +
+                                        "Absences:         ₱ %.2f\n" +
+                                        "Late/Undertime:   ₱ %.2f\n" +
                                         "========================================\n" +
                                         "NET PAY:          ₱ %.2f\n" +
                                         "========================================",
                                 id, name, status, period,
                                 rate, (timeData.getTotalHours() / 8.0), grossCalc.getOvertimepay(), grossCalc.getGrossPay(),
                                 dedCalc.getSssContribution(), dedCalc.getPhilhealthContribution(), dedCalc.getPagibigContribution(),
-                                (dedCalc.getAbsenceDeduction() + dedCalc.getUndertimeDeduction()), dedCalc.getWithholdingTax(),
+                                dedCalc.getAbsenceDeduction(), dedCalc.getUndertimeDeduction(), dedCalc.getWithholdingTax(),
                                 netPay
                         );
 

@@ -1,5 +1,6 @@
 package gui;
 
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
@@ -43,6 +44,7 @@ public class AdminView {
     private storage.EmployeeStorage empStorage = new storage.EmployeeStorage();
 
     public AdminView() {
+        //Load employees info into the table
         employeeModel = new DefaultTableModel(new String[]{"ID", "Name", "Status", "Rate"}, 0);
         java.util.List<Object[]> savedEmployees = empStorage.loadEmployees();
         for (Object[] row : savedEmployees) {
@@ -52,6 +54,7 @@ public class AdminView {
         if (btnAddEmployee != null) btnAddEmployee.addActionListener(e -> showPanel(addEmployeeCard));
         if (btnManage != null) btnManage.addActionListener(e -> showPanel(manageCard));
 
+        //Load employees request the table
         requestModel = new DefaultTableModel(new String[]{"Employee", "Type", "Days", "Status"}, 0);
         storage.RequestStorage reqStorage = new storage.RequestStorage();
         java.util.List<Object[]> savedRequests = reqStorage.loadRequests();
@@ -95,6 +98,7 @@ public class AdminView {
                     String empID = selectedItem.split(" - ")[0];
                     String empName = selectedItem.split(" - ")[1];
                     String selectedMonth = cbMonth.getSelectedItem().toString();
+
                     String cutOff = cbPayPeriod.getSelectedItem().toString();
                     String fullPayPeriod = selectedMonth + " - " + cutOff;
 
@@ -109,6 +113,16 @@ public class AdminView {
                             break;
                         }
                     }
+                    int startDay, endDay;
+                    java.time.YearMonth yearMonth = java.time.YearMonth.of(2026, java.time.Month.valueOf(selectedMonth.toUpperCase()));
+
+                    if (cutOff.contains("1st")) {
+                        startDay = 1;
+                        endDay = 15;
+                    } else {
+                        startDay = 16;
+                        endDay = yearMonth.lengthOfMonth();
+                    }
 
                     // Timekeeping from CSV
                     timekeeping.Timekeeping timeData = new timekeeping.Timekeeping();
@@ -116,13 +130,64 @@ public class AdminView {
 
                     java.util.List<Object[]> myRecords = timeStorage.loadRecordsForEmployee(empID);
 
-                    for (Object[] row : myRecords) {
-                        String date = row[1].toString();
-                        String tIn = row[2].toString();
-                        String tOut = row[3].toString();
+                    int missingDays = 0;
+                    for (int d = startDay; d <= endDay; d++) {
+                        String targetDate = selectedMonth + " " + d;
+                        boolean foundInCSV = false;
 
-                        timeData.addDailyRecord(empID, date, tIn, tOut);
+                        // 1. ADD THIS: Check if the employee has an approved request (Leave or Overtime) for this day
+                        boolean isLeaveApproved = false;
+                        boolean isOtApproved = false;
+                        java.util.List<Object[]> allRequests = reqStorage.loadRequests();
+
+                        for (Object[] req : allRequests) {
+                            if (req[0].toString().equalsIgnoreCase(empName) && req[2].toString().contains(targetDate)) {
+                                if (req[3].toString().equalsIgnoreCase("Approved")) {
+                                    if (req[1].toString().equalsIgnoreCase("Leave")) isLeaveApproved = true;
+                                    if (req[1].toString().equalsIgnoreCase("Overtime")) isOtApproved = true;
+                                }
+                            }
+                        }
+
+                        // 2. SEARCH FOR ATTENDANCE LOG
+                        for (Object[] row : myRecords) {
+                            String logDate = row[1].toString().trim();
+                            if (logDate.equalsIgnoreCase(targetDate)) {
+                                String tIn = row[2].toString().trim();
+                                String tOut = row[3].toString().trim();
+
+                                // 3. ADD THIS: If OT is NOT approved, reset clock-out to 5:00 PM
+                                if (!isOtApproved && tOut.contains("PM")) {
+                                    int hour = Integer.parseInt(tOut.split(":")[0]);
+                                    if (hour >= 5 && hour != 12) {
+                                        tOut = "05:00 PM";
+                                    }
+                                }
+
+                                timeData.addDailyRecord(empID, logDate, tIn, tOut);
+                                foundInCSV = true;
+                                break;
+                            }
+                        }
+
+                        // 4. ADD THIS: If there's no log but Leave is approved, give 8 hours pay
+                        if (!foundInCSV && isLeaveApproved) {
+                            timeData.addDailyRecord(empID, targetDate, "08:00 AM", "05:00 PM");
+                            foundInCSV = true; // Mark as found so it doesn't count as absent
+                        }
+
+                        // Check for absences on weekdays
+                        java.time.LocalDate dateToCheck = java.time.LocalDate.of(2026, yearMonth.getMonth(), d);
+                        boolean isWeekend = (dateToCheck.getDayOfWeek() == java.time.DayOfWeek.SATURDAY ||
+                                dateToCheck.getDayOfWeek() == java.time.DayOfWeek.SUNDAY);
+
+                        if (!foundInCSV && !isWeekend) {
+                            missingDays++;
+                        }
                     }
+
+                    // Finalize Calculations
+                    timeData.setTotalAbsences(missingDays);
 
                     timeData.calculateHours();
                     // midterm math
@@ -132,10 +197,14 @@ public class AdminView {
                     computation.DeductionsCalculator dedCalc = new computation.DeductionsCalculator();
                     dedCalc.calculateAllDeductions(status, baseRate, timeData, grossCalc.getGrossPay());
 
-                    double netPay = grossCalc.getGrossPay() -
-                            (dedCalc.getSssContribution() + dedCalc.getPhilhealthContribution() +
-                                    dedCalc.getPagibigContribution() + dedCalc.getAbsenceDeduction() +
-                                    dedCalc.getUndertimeDeduction());
+                    double totalDeductions = dedCalc.getSssContribution() +
+                            dedCalc.getPhilhealthContribution() +
+                            dedCalc.getPagibigContribution() +
+                            dedCalc.getAbsenceDeduction() +
+                            dedCalc.getUndertimeDeduction() +
+                            dedCalc.getWithholdingTax();
+
+                    double netPay = grossCalc.getGrossPay() - totalDeductions;
                     if (netPay < 0) netPay = 0.0;
 
                     // Print
@@ -160,16 +229,16 @@ public class AdminView {
                                     "SSS:              ₱ %.2f\n" +
                                     "PhilHealth:       ₱ %.2f\n" +
                                     "Pag-IBIG:         ₱ %.2f\n" +
-                                    "Absences/Late:    ₱ %.2f\n" +
-                                    "Withholding Tax:  ₱ %.2f\n\n" +
+                                    "Absences:         ₱ %.2f\n" +
+                                    "Late/Undertime:   ₱ %.2f\n" +
                                     "========================================\n" +
                                     "NET PAY:          ₱ %.2f\n" +
                                     "========================================",
-                            empID, empName, status, fullPayPeriod,
-                            baseRate, (timeData.getTotalHours() / 8.0), grossCalc.getOvertimepay(), grossCalc.getGrossPay(),
-                            dedCalc.getSssContribution(), dedCalc.getPhilhealthContribution(), dedCalc.getPagibigContribution(),
-                            (dedCalc.getAbsenceDeduction() + dedCalc.getUndertimeDeduction()), dedCalc.getWithholdingTax(),
-                            netPay
+
+                            empID, empName, status, fullPayPeriod, baseRate,
+                            (timeData.getTotalHours() / 8.0), grossCalc.getOvertimepay(), grossCalc.getGrossPay(), dedCalc.getSssContribution(),
+                            dedCalc.getPhilhealthContribution(), dedCalc.getPagibigContribution(), dedCalc.getAbsenceDeduction(), dedCalc.getUndertimeDeduction(),
+                            dedCalc.getWithholdingTax(), netPay
                     );
 
                     txtAdminPayslipPreview.setText(receipt);
@@ -183,12 +252,18 @@ public class AdminView {
                 String lblName = txtName.getText().trim();
                 String lblStatus = (cbStatus != null) ? (String) cbStatus.getSelectedItem() : "Regular";
                 String lblRate = txtRate.getText().trim();
-
+                // Validation check
                 if (lblID.isEmpty() || lblName.isEmpty() || lblRate.isEmpty()) {
                     JOptionPane.showMessageDialog(adminPanel, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
+                //Duplicate check2222
+                for (int i = 0; i < employeeModel.getRowCount(); i++) {
+                    if (employeeModel.getValueAt(i, 0).toString().equalsIgnoreCase(lblID)) {
+                        JOptionPane.showMessageDialog(adminPanel, "ID " + lblID + " already exists! Use a different ID.", "Invalid ID", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
                 try {
                     Double.parseDouble(lblRate);
 

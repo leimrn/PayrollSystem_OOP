@@ -202,7 +202,7 @@
                       <foreground color="-1"/>
                       <lineWrap value="false"/>
                       <rows value="29"/>
-                      <text value="---------------------------------------------&#10;Employee ID:      2025-001 &#10;Name:             Cyrene Khaslana &#10;Status:           Probationary &#10;Pay Period:       May 1 - May 15, 2026&#10;&#10;---------------------------------------------&#10;EARNINGS&#10;---------------------------------------------&#10;Base Rate:        ₱ 500.00 / Day&#10;Days Worked:      11 Days&#10;Gross Basic Pay:  ₱ 5,500.00&#10;Overtime Pay:     ₱ 0.00&#10;&#10;TOTAL EARNINGS:   ₱ 5,500.00&#10;&#10;---------------------------------------------&#10;DEDUCTIONS&#10;---------------------------------------------&#10;SSS:              ₱ 247.50&#10;PhilHealth:       ₱ 137.50&#10;Pag-IBIG:         ₱ 100.00&#10;Late/Absences:    ₱ 0.00&#10;&#10;TOTAL DEDUCTIONS: ₱ 485.00&#10;&#10;---------------------------------------------&#10;NET PAY:          ₱ 5,015.00&#10;---------------------------------------------"/>
+                      <text value=""/>
                       <wrapStyleWord value="false"/>
                     </properties>
                   </component>

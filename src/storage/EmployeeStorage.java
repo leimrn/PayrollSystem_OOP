@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeStorage {
+    //Location of the added employees
     private static final String FILE_PATH = "resources/employees.csv";
 
     public void saveEmployee(String id, String name, String status, String rate) {

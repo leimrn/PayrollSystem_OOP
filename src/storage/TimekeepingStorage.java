@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimekeepingStorage {
+    //Location of the employees attendance
     private static final String FILE_PATH = "resources/attendance.csv";
 
     // Call by the EmployeeView when they hit "Clock Out"

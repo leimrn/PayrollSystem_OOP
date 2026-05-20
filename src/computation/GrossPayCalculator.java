@@ -17,7 +17,7 @@ public class GrossPayCalculator {
 
         // check if employee is parttime (no work, no pay logic)
         if (status.equalsIgnoreCase("Part-time")) {
-            this.hourrate = baseRate;
+            this.hourrate = (baseRate / 22.0) /8.0;
 
             this.overtimepay = timekeeping.getTotalOvertime() * this.hourrate * 1.25;
             double weekendPay = timekeeping.getTotalWeekendHours() * this.hourrate * 1.30;

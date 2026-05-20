@@ -29,6 +29,44 @@ public class Timekeeping {
         timesheet.add(new DailyRecord(empId, date, timeIn, timeOut));
     }
 
+    public void setTotalAbsences(int absences) {
+        this.totalAbsences = absences;
+    }
+
+    public void countAbsences(String currentMonth, int startDay, int endDay, int year) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d yyyy", Locale.ENGLISH);
+        int missingCount = 0;
+
+        for (int day = startDay; day <= endDay; day++) {
+            String targetDate = currentMonth + " " + day; // e.g., "May 16"
+            boolean foundInTimesheet = false;
+
+            // Check if this specific day exists in your ArrayList
+            for (DailyRecord record : timesheet) {
+                if (record.getDate().equalsIgnoreCase(targetDate)) {
+                    foundInTimesheet = true;
+                    break;
+                }
+            }
+
+            // Logic: If NOT found in CSV AND it's a weekday = Absence
+            if (!foundInTimesheet) {
+                try {
+                    LocalDate dateObj = LocalDate.parse(targetDate + " " + year, dateFormatter);
+                    DayOfWeek dayOfWeek = dateObj.getDayOfWeek();
+
+                    // Only count if it's Monday to Friday
+                    if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
+                        missingCount++;
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }
+        this.totalAbsences = missingCount;
+    }
+
     public double getTotalHours() { return totalHours; }
     public double getTotalOvertime() { return totalOvertime; }
     public double getTotalUndertime() { return totalUndertime; }
@@ -44,6 +82,7 @@ public class Timekeeping {
         for (DailyRecord record : timesheet) {
             if (record.getTimeIn().equalsIgnoreCase("Leave")) {
                 totalLeaves++;
+                totalHours += 8.0;
                 continue;
             }
 
