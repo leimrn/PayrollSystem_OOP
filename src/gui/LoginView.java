@@ -1,12 +1,10 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.*;
 
 public class LoginView extends JFrame {
     private JPanel mainPanel;
@@ -24,15 +22,35 @@ public class LoginView extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String user = textField1.getText();
-                String pass = new String(passwordField1.getPassword());
+                String user = textField1.getText().trim();
+                String pass = new String(passwordField1.getPassword()).trim();
 
+                // Master Admin
                 if (user.equals("admin") && pass.equals("admin123")) {
                     openDashboard(new AdminView().getAdminPanel(), "Admin Dashboard");
-                } else if (user.equals("employee") && pass.equals("emp123")) {
-                    // FIX: Pass the 'user' variable into EmployeeView
-                    openDashboard(new EmployeeView(user).getEmployeePanel(), "Employee Dashboard");
-                } else {
+                    return; // Stop running code
+                }
+
+                // csv employee login
+                boolean loggedIn = false;
+                storage.EmployeeStorage empStorage = new storage.EmployeeStorage();
+                java.util.List<Object[]> allEmps = empStorage.loadEmployees();
+
+                for (Object[] emp : allEmps) {
+                    String savedID = emp[0].toString();
+                    String savedName = emp[1].toString();
+
+                    //  Username = Name
+                    //  Password = ID
+                    if (user.equals(savedName) && pass.equals(savedID)) {
+                        openDashboard(new EmployeeView(savedID).getEmployeePanel(), "Employee Dashboard");
+                        loggedIn = true;
+                        break;
+                    }
+                }
+
+                // If no match was found in the CSV (and it wasn't the admin)
+                if (!loggedIn) {
                     JOptionPane.showMessageDialog(null, "Invalid Credentials", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -69,18 +87,18 @@ public class LoginView extends JFrame {
         UIManager.put("OptionPane.messageForeground", textWhite);
         UIManager.put("Panel.background", darkBg);
 
-// Header Styling
+        // Header Styling
         UIManager.put("TableHeader.background", surfaceBg);
         UIManager.put("TableHeader.foreground", accentOrange);
 
-// Table Styling
+        // Table Styling
         UIManager.put("Table.background", darkBg);
         UIManager.put("Table.foreground", textWhite);
         UIManager.put("Table.gridColor", surfaceBg);
         UIManager.put("Table.selectionBackground", accentOrange);
         UIManager.put("Table.selectionForeground", darkBg);
 
-// The "White Void" Fix
+        // The "White Void" Fix (Viewport)
         UIManager.put("Viewport.background", darkBg);
 
         SwingUtilities.invokeLater(() -> {

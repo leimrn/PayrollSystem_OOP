@@ -110,12 +110,21 @@ public class AdminView {
                         }
                     }
 
-                    // Setup Timekeeping (Add attendance csv eventually)
+                    // Timekeeping from CSV
                     timekeeping.Timekeeping timeData = new timekeeping.Timekeeping();
-                    timeData.addDailyRecord(empID, "May 1", "08:00 AM", "05:00 PM"); // Dummy 8 hours
-                    timeData.addDailyRecord(empID, "May 2", "08:00 AM", "07:00 PM"); // Dummy OT
-                    timeData.calculateHours();
+                    storage.TimekeepingStorage timeStorage = new storage.TimekeepingStorage();
 
+                    java.util.List<Object[]> myRecords = timeStorage.loadRecordsForEmployee(empID);
+
+                    for (Object[] row : myRecords) {
+                        String date = row[1].toString();
+                        String tIn = row[2].toString();
+                        String tOut = row[3].toString();
+
+                        timeData.addDailyRecord(empID, date, tIn, tOut);
+                    }
+
+                    timeData.calculateHours();
                     // midterm math
                     computation.GrossPayCalculator grossCalc = new computation.GrossPayCalculator();
                     grossCalc.calculategrosspay(status, baseRate, timeData);

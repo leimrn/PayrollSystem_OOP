@@ -466,7 +466,7 @@
                   <text value="Base Rate:"/>
                 </properties>
               </component>
-              <component id="2d5b5" class="javax.swing.JLabel">
+              <component id="2d5b5" class="javax.swing.JLabel" binding="lblName">
                 <constraints>
                   <grid row="4" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>
@@ -477,7 +477,7 @@
                   <text value="Cyrene Khaslana"/>
                 </properties>
               </component>
-              <component id="6e3e" class="javax.swing.JLabel">
+              <component id="6e3e" class="javax.swing.JLabel" binding="lblStatus">
                 <constraints>
                   <grid row="5" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>
@@ -488,7 +488,7 @@
                   <text value="Probationary"/>
                 </properties>
               </component>
-              <component id="55801" class="javax.swing.JLabel">
+              <component id="55801" class="javax.swing.JLabel" binding="lblRate">
                 <constraints>
                   <grid row="6" column="1" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <gridbag top="5" left="10" bottom="5" right="10" weightx="1.0" weighty="0.0"/>

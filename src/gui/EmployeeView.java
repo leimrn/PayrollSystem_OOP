@@ -81,12 +81,37 @@ public class EmployeeView {
                         String name = lblName.getText();
                         String status = lblStatus.getText();
                         double rate = Double.parseDouble(lblRate.getText());
-                        String period = "May 1 - May 15, 2026"; // Current cut-off
+                        // Get the date
+                        java.time.LocalDate today = java.time.LocalDate.now();
+                        String month = today.format(java.time.format.DateTimeFormatter.ofPattern("MMMM"));
+                        String year = String.valueOf(today.getYear());
+                        int currentDay = today.getDayOfMonth();
 
-                        // Dummy Timekeeping
+                        // determine the cut-off period based on today's date
+                        String period;
+                        if (currentDay <= 15) {
+                            period = month + " 1 - " + month + " 15, " + year;
+                        } else {
+                            // lengthOfMonth() knows if it's 28, 30, or 31 days!
+                            int lastDay = today.lengthOfMonth();
+                            period = month + " 16 - " + month + " " + lastDay + ", " + year;
+                        }
+
+                        // REAL Timekeeping from CSV
                         timekeeping.Timekeeping timeData = new timekeeping.Timekeeping();
-                        timeData.addDailyRecord(id, "May 1", "08:00 AM", "05:00 PM");
-                        timeData.addDailyRecord(id, "May 2", "08:00 AM", "07:00 PM");
+                        storage.TimekeepingStorage timeStorage = new storage.TimekeepingStorage();
+
+                        // Load only the records for this specific employee
+                        java.util.List<Object[]> myRecords = timeStorage.loadRecordsForEmployee(employeeID);
+
+                        for (Object[] row : myRecords) {
+                            String date = row[1].toString();
+                            String tIn = row[2].toString();
+                            String tOut = row[3].toString();
+
+                            timeData.addDailyRecord(employeeID, date, tIn, tOut);
+                        }
+
                         timeData.calculateHours();
 
                         // midterm math
@@ -184,28 +209,48 @@ public class EmployeeView {
         if (btnClockIn != null) {
             btnClockIn.addActionListener(e -> {
                 if (txtDay.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(employeePanel, "Please enter the day before clocking in.");
+                    JOptionPane.showMessageDialog(employeePanel, "Please enter the day (e.g., 15) before clocking in.");
                     return;
                 }
-                String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"));
-                txtTimeIn.setText(currentTime);
-                JOptionPane.showMessageDialog(employeePanel, "Successfully Clocked In at " + currentTime);
+
+                // DEMO FIX: Read the text box first. If empty, use real system time.
+                String timeToSave = txtTimeIn.getText().trim();
+                if (timeToSave.isEmpty()) {
+                    timeToSave = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
+                    txtTimeIn.setText(timeToSave);
+                }
+
+                JOptionPane.showMessageDialog(employeePanel, "Successfully Clocked In at " + timeToSave + ".\nDon't forget to Clock Out at the end of your shift!");
             });
         }
 
         if (btnClockOut != null) {
             btnClockOut.addActionListener(e -> {
-                if (txtDay.getText().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(employeePanel, "Please enter the day before clocking out.");
-                    return;
-                }
-                if (txtTimeIn.getText().trim().isEmpty()) {
+                if (txtDay.getText().trim().isEmpty() || txtTimeIn.getText().trim().isEmpty()) {
                     JOptionPane.showMessageDialog(employeePanel, "You must Clock In first before you can Clock Out.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"));
-                txtTimeOut.setText(currentTime);
-                JOptionPane.showMessageDialog(employeePanel, "Successfully Clocked Out at " + currentTime + ".\nAttendance logged for " + cbMonth.getSelectedItem() + " " + txtDay.getText());
+
+                // DEMO FIX: Read the text box first. If empty, use real system time.
+                String timeOut = txtTimeOut.getText().trim();
+                if (timeOut.isEmpty()) {
+                    timeOut = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
+                    txtTimeOut.setText(timeOut);
+                }
+
+                String timeIn = txtTimeIn.getText().trim();
+                String fullDate = cbMonth.getSelectedItem().toString() + " " + txtDay.getText().trim();
+
+                // SAVE TO CSV
+                storage.TimekeepingStorage timeStorage = new storage.TimekeepingStorage();
+                timeStorage.saveRecord(employeeID, fullDate, timeIn, timeOut);
+
+                JOptionPane.showMessageDialog(employeePanel, "Successfully Clocked Out at " + timeOut + ".\nAttendance logged for " + fullDate);
+
+                // Clear the boxes for the next day
+                txtDay.setText("");
+                txtTimeIn.setText("");
+                txtTimeOut.setText("");
             });
         }
 
