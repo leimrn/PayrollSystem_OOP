@@ -231,6 +231,7 @@ public class AdminView {
                                     "Pag-IBIG:         ₱ %.2f\n" +
                                     "Absences:         ₱ %.2f\n" +
                                     "Late/Undertime:   ₱ %.2f\n" +
+                                    "Withholding Tax:  ₱ %.2f\n\n" +
                                     "========================================\n" +
                                     "NET PAY:          ₱ %.2f\n" +
                                     "========================================",
