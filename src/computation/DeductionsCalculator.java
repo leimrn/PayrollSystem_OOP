@@ -3,7 +3,6 @@ package computation;
 import timekeeping.Timekeeping;
 
 public class DeductionsCalculator {
-
     private double undertimeDeduction;
     private double absenceDeduction;
     private double sssContribution;
@@ -34,9 +33,10 @@ public class DeductionsCalculator {
             // Contractual/Part-time: deduct for both absences and leaves [cite: 1515, 1516]
             daysToDeduct += timeData.getTotalLeaves();
         }
-
+        double calculatedDeduction = daysToDeduct * 8.0 * hourlyrate;
         this.absenceDeduction = daysToDeduct * 8.0 * hourlyrate;
     }
+
 
     private void computeGovernmentContributions(double baseSalary) {
         // Pag-IBIG: Capped at 10,000 base with 2% rate [cite: 1581]
@@ -73,14 +73,15 @@ public class DeductionsCalculator {
         double hourlyrate;
         double monthlyIncomeBase;
 
+        // Standard hourly rate calculation for everyone
+        hourlyrate = (baseRate / 22.0) / 8.0;
+
         if (status.equalsIgnoreCase("Part-time")) {
-            hourlyrate = baseRate;
-            monthlyIncomeBase = grossPay * 2; // Estimate for bracket calculation
-            this.absenceDeduction = 0.0;
-            this.undertimeDeduction = 0.0;
+            monthlyIncomeBase = grossPay * 2;
+            // REMOVED: this.absenceDeduction = 0.0;
+            // We now call the attendance logic for everyone:
+            computeAttendanceDeductions(status, timeData, hourlyrate);
         } else {
-            // Standard 22-day logic [cite: 1861]
-            hourlyrate = (baseRate / 22.0) / 8.0;
             monthlyIncomeBase = baseRate;
             computeAttendanceDeductions(status, timeData, hourlyrate);
         }

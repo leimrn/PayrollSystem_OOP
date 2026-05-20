@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestStorage {
+    //Location of the employees request
     private static final String FILE_PATH = "resources/requests.csv";
 
     // Called when an Employee submits a request
