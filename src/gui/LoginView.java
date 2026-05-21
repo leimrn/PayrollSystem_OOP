@@ -68,6 +68,10 @@ public class LoginView extends JFrame {
     }
 
     public static void main(String[] args) {
+        System.setProperty("sun.java2d.noddraw", "true");
+        System.setProperty("sun.java2d.d3d", "false");
+        System.setProperty("sun.java2d.opengl", "false");
+
         Color darkBg = new Color(30, 30, 30);
         Color surfaceBg = new Color(45, 45, 45);
         Color accentOrange = new Color(255, 140, 0);

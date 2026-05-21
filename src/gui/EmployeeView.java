@@ -278,7 +278,7 @@ public class EmployeeView {
                     return;
                 }
 
-                // DEMO FIX: Read the text box first. If empty, use real system time.
+                // Read the text box first. If empty, use real system time.
                 String timeToSave = txtTimeIn.getText().trim();
                 if (timeToSave.isEmpty()) {
                     timeToSave = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
@@ -296,7 +296,7 @@ public class EmployeeView {
                     return;
                 }
 
-                // DEMO FIX: Read the text box first. If empty, use real system time.
+                // Read the text box first. If empty, use real system time.
                 String timeOut = txtTimeOut.getText().trim();
                 if (timeOut.isEmpty()) {
                     timeOut = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));

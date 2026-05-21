@@ -135,7 +135,7 @@ public class AdminView {
                         String targetDate = selectedMonth + " " + d;
                         boolean foundInCSV = false;
 
-                        // 1. ADD THIS: Check if the employee has an approved request (Leave or Overtime) for this day
+                        // Check if the employee has an approved request (Leave or Overtime) for this day
                         boolean isLeaveApproved = false;
                         boolean isOtApproved = false;
                         java.util.List<Object[]> allRequests = reqStorage.loadRequests();
@@ -149,14 +149,14 @@ public class AdminView {
                             }
                         }
 
-                        // 2. SEARCH FOR ATTENDANCE LOG
+                        // SEARCH FOR ATTENDANCE LOG
                         for (Object[] row : myRecords) {
                             String logDate = row[1].toString().trim();
                             if (logDate.equalsIgnoreCase(targetDate)) {
                                 String tIn = row[2].toString().trim();
                                 String tOut = row[3].toString().trim();
 
-                                // 3. ADD THIS: If OT is NOT approved, reset clock-out to 5:00 PM
+                                // If OT is NOT approved, reset clock-out to 5:00 PM
                                 if (!isOtApproved && tOut.contains("PM")) {
                                     int hour = Integer.parseInt(tOut.split(":")[0]);
                                     if (hour >= 5 && hour != 12) {
@@ -170,7 +170,7 @@ public class AdminView {
                             }
                         }
 
-                        // 4. ADD THIS: If there's no log but Leave is approved, give 8 hours pay
+                        // If there's no log but Leave is approved, give 8 hours pay
                         if (!foundInCSV && isLeaveApproved) {
                             timeData.addDailyRecord(empID, targetDate, "08:00 AM", "05:00 PM");
                             foundInCSV = true; // Mark as found so it doesn't count as absent
@@ -258,7 +258,7 @@ public class AdminView {
                     JOptionPane.showMessageDialog(adminPanel, "All fields are required!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                //Duplicate check2222
+                //Duplicate check
                 for (int i = 0; i < employeeModel.getRowCount(); i++) {
                     if (employeeModel.getValueAt(i, 0).toString().equalsIgnoreCase(lblID)) {
                         JOptionPane.showMessageDialog(adminPanel, "ID " + lblID + " already exists! Use a different ID.", "Invalid ID", JOptionPane.WARNING_MESSAGE);
